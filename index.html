@@ -57,6 +57,7 @@
             border-bottom: 1px solid var(--matrix-green);
             margin-bottom: 2rem;
             animation: flicker 5s infinite alternate;
+            position: relative;
         }
         
         .logo {
@@ -68,6 +69,29 @@
         
         .logo span {
             color: #fff;
+        }
+        
+        /* DEV Button */
+        .dev-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.5rem 1rem;
+            background: transparent;
+            color: var(--matrix-green);
+            border: 1px solid var(--matrix-green);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            z-index: 10;
+        }
+        
+        .dev-btn:hover {
+            background: var(--matrix-green);
+            color: var(--matrix-dark);
+            box-shadow: 0 0 10px var(--matrix-green);
         }
         
         /* Hero section */
@@ -426,6 +450,13 @@
             .modal-text {
                 font-size: 1.5rem;
             }
+            
+            .dev-btn {
+                top: 0.5rem;
+                right: 0.5rem;
+                padding: 0.3rem 0.7rem;
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
@@ -436,6 +467,7 @@
     <div class="container">
         <header>
             <div class="logo">MATRIX</div>
+            <a href="https://t.me/NeoKnockKnockMatrix" class="dev-btn" target="_blank">DEV</a>
         </header>
         
         <section class="hero">
