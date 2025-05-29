@@ -1,257 +1,703 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Матричный кот</title>
+    <title>MATRIX</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
-        
         :root {
             --matrix-green: #00ff41;
-            --dark-bg: #0d0208;
-            --glow: 0 0 10px var(--matrix-green);
+            --matrix-dark: #0d0208;
+            --matrix-light: #003b00;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', monospace;
         }
         
         body {
-            background-color: var(--dark-bg);
+            background-color: var(--matrix-dark);
             color: var(--matrix-green);
-            font-family: 'JetBrains Mono', monospace;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
             overflow-x: hidden;
-        }
-        
-        .container {
-            max-width: 800px;
-            padding: 2rem;
-            text-align: center;
             position: relative;
+            height: 100vh;
+            line-height: 1.6;
         }
         
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            text-shadow: var(--glow);
-            animation: pulse 2s infinite alternate;
-        }
-        
-        .matrix-cat {
-            font-size: 12px;
-            line-height: 12px;
-            letter-spacing: 1px;
-            white-space: pre;
-            margin: 2rem 0;
-            text-shadow: var(--glow);
-            transition: all 0.3s ease;
-            animation: float 3s ease-in-out infinite;
-        }
-        
-        .matrix-cat:hover {
-            transform: scale(1.05);
-            text-shadow: 0 0 15px var(--matrix-green);
-        }
-        
-        .controls {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        
-        button {
-            background: transparent;
-            border: 1px solid var(--matrix-green);
-            color: var(--matrix-green);
-            padding: 0.8rem 1.5rem;
-            font-family: inherit;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        button:hover {
-            background: var(--matrix-green);
-            color: var(--dark-bg);
-            box-shadow: var(--glow);
-        }
-        
-        button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, var(--matrix-green), transparent);
-            transition: 0.5s;
-        }
-        
-        button:hover::before {
-            left: 100%;
-        }
-        
+        /* Matrix rain background */
         .matrix-rain {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
             z-index: -1;
-            opacity: 0.3;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+        
+        /* Main container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Header */
+        header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--matrix-green);
+            margin-bottom: 2rem;
+            animation: flicker 5s infinite alternate;
+        }
+        
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            text-shadow: 0 0 10px var(--matrix-green);
+            letter-spacing: 2px;
+        }
+        
+        .logo span {
+            color: #fff;
+        }
+        
+        /* Hero section */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            min-height: 60vh;
+            padding: 2rem 0;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 15px var(--matrix-green);
+            animation: pulse 2s infinite;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: transparent;
+            color: var(--matrix-green);
+            border: 1px solid var(--matrix-green);
+            border-radius: 4px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-button:hover {
+            background: var(--matrix-green);
+            color: var(--matrix-dark);
+            box-shadow: 0 0 20px var(--matrix-green);
+        }
+        
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.4), transparent);
+            transition: 0.5s;
+        }
+        
+        .cta-button:hover::before {
+            left: 100%;
+        }
+        
+        /* Terminal effect */
+        .terminal {
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid var(--matrix-green);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 3rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--matrix-light);
+        }
+        
+        .terminal-dots {
+            display: flex;
+            gap: 0.5rem;
+            margin-right: 1rem;
+        }
+        
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .terminal-dot:nth-child(1) {
+            background: #ff5f56;
+        }
+        
+        .terminal-dot:nth-child(2) {
+            background: #ffbd2e;
+        }
+        
+        .terminal-dot:nth-child(3) {
+            background: #27c93f;
+        }
+        
+        .terminal-title {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        .terminal-content {
+            font-family: 'Courier New', monospace;
+            line-height: 1.8;
+        }
+        
+        .terminal-content p {
+            margin-bottom: 0.5rem;
+        }
+        
+        .terminal-content .command {
+            color: #fff;
+        }
+        
+        .terminal-content .response {
+            opacity: 0.7;
+        }
+        
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 1.2rem;
+            background: var(--matrix-green);
+            animation: blink 1s infinite;
+            vertical-align: middle;
+            margin-left: 2px;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+            border-top: 1px solid var(--matrix-light);
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .modal-content {
+            position: relative;
+            width: 80%;
+            max-width: 800px;
+            height: 70vh;
+            background-color: var(--matrix-dark);
+            border: 1px solid var(--matrix-green);
+            border-radius: 8px;
+            padding: 2rem;
+            overflow: hidden;
+            animation: glitch 1s linear infinite;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            color: var(--matrix-green);
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 1001;
+        }
+        
+        .modal-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+            text-align: center;
+            width: 100%;
+            padding: 0 2rem;
+        }
+        
+        .virus {
+            position: absolute;
+            color: #ff5555;
+            font-size: 1.5rem;
+            animation: virusMove linear infinite;
+            opacity: 0;
+        }
+        
+        .bug {
+            position: absolute;
+            color: #ffaa00;
+            font-size: 1rem;
+            animation: bugMove linear infinite;
+            opacity: 0;
+        }
+        
+        .error {
+            position: absolute;
+            color: #ff0000;
+            font-size: 1.2rem;
+            animation: errorShake 0.1s infinite;
+            opacity: 0;
+        }
+        
+        /* Animations */
+        @keyframes flicker {
+            0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% {
+                opacity: 1;
+            }
+            20%, 21.999%, 63%, 63.999%, 65%, 69.999% {
+                opacity: 0.6;
+            }
         }
         
         @keyframes pulse {
-            0% { opacity: 0.7; }
-            100% { opacity: 1; }
-        }
-        
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
-        }
-        
-        @keyframes matrix-fall {
-            to {
-                transform: translateY(100vh);
+            0% {
+                opacity: 0.8;
+            }
+            50% {
+                opacity: 1;
+                text-shadow: 0 0 20px var(--matrix-green);
+            }
+            100% {
+                opacity: 0.8;
             }
         }
         
-        /* Адаптивность */
+        @keyframes blink {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0;
+            }
+        }
+        
+        @keyframes glitch {
+            0% {
+                transform: translate(0);
+            }
+            20% {
+                transform: translate(-2px, 2px);
+            }
+            40% {
+                transform: translate(-2px, -2px);
+            }
+            60% {
+                transform: translate(2px, 2px);
+            }
+            80% {
+                transform: translate(2px, -2px);
+            }
+            100% {
+                transform: translate(0);
+            }
+        }
+        
+        @keyframes virusMove {
+            0% {
+                transform: translate(0, 0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translate(calc(100vw - 100px), calc(100vh - 100px));
+                opacity: 0;
+            }
+        }
+        
+        @keyframes bugMove {
+            0% {
+                transform: translate(0, 0);
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                transform: translate(calc(50vw - 100px), calc(50vh - 100px));
+                opacity: 0;
+            }
+        }
+        
+        @keyframes errorShake {
+            0% {
+                transform: translate(1px, 1px);
+            }
+            10% {
+                transform: translate(-1px, -2px);
+            }
+            20% {
+                transform: translate(-3px, 0px);
+            }
+            30% {
+                transform: translate(3px, 2px);
+            }
+            40% {
+                transform: translate(1px, -1px);
+            }
+            50% {
+                transform: translate(-1px, 2px);
+            }
+            60% {
+                transform: translate(-3px, 1px);
+            }
+            70% {
+                transform: translate(3px, 1px);
+            }
+            80% {
+                transform: translate(-1px, -1px);
+            }
+            90% {
+                transform: translate(1px, 2px);
+            }
+            100% {
+                transform: translate(1px, -2px);
+            }
+        }
+        
+        /* Responsive */
         @media (max-width: 768px) {
-            h1 {
-                font-size: 1.8rem;
+            .hero h1 {
+                font-size: 2.5rem;
             }
             
-            .matrix-cat {
-                font-size: 8px;
-                line-height: 8px;
+            .modal-content {
+                width: 95%;
+                height: 80vh;
+            }
+            
+            .modal-text {
+                font-size: 1.5rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="matrix-rain" id="matrixRain"></div>
+    <!-- Matrix rain background -->
+    <canvas id="matrix-rain" class="matrix-rain"></canvas>
     
     <div class="container">
-        <h1>MATRIX CAT</h1>
+        <header>
+            <div class="logo">MATRIX</div>
+        </header>
         
-        <div class="matrix-cat" id="matrixCat">
-            /\_/\
-           ( o.o )
-            > ^ <
-           /     \
-          /_/ \_\_\
-         //\\ //\\\
-        ///\\\///\\\\
-       ////\\\\\\\\\\\\
-      /////\\\\\\\\\\\\\
-     //////\\\\\\\\\\\\\\\\
+        <section class="hero">
+            <h1>WAKE UP, <span>NEO</span>...</h1>
+            <p>The Matrix has you. Follow the white rabbit. Knock, knock, Neo. The truth is waiting.</p>
+            <a href="#" id="redPillBtn" class="cta-button">TAKE THE RED PILL</a>
+        </section>
+        
+        <div class="terminal">
+            <div class="terminal-header">
+                <div class="terminal-dots">
+                    <div class="terminal-dot"></div>
+                    <div class="terminal-dot"></div>
+                    <div class="terminal-dot"></div>
+                </div>
+                <div class="terminal-title">user@matrix:~</div>
+            </div>
+            <div class="terminal-content">
+                <p class="command">> system.status --matrix</p>
+                <p class="response">MATRIX OS v3.1.1 running</p>
+                <p class="command">> connect --neo</p>
+                <p class="response">Establishing connection... done.</p>
+                <p class="command">> run --prophecy</p>
+                <p class="response">You are The One, Neo. The prophecy is true.</p>
+                <p class="command">> _<span class="cursor"></span></p>
+            </div>
         </div>
         
-        <div class="controls">
-            <button id="glowBtn">Усилить свечение</button>
-            <button id="animateBtn">Анимация</button>
-            <button id="colorBtn">Сменить цвет</button>
+        <footer>
+            <p>© 2023 MATRIX | The system is watching</p>
+        </footer>
+    </div>
+    
+    <!-- Modal -->
+    <div id="matrixModal" class="modal">
+        <div class="modal-content" id="modalContent">
+            <span class="modal-close" id="modalClose">&times;</span>
+            <div class="modal-text" id="modalText">ACCESSING REALITY CORE...</div>
         </div>
     </div>
     
     <script>
-        // Матричный дождь на фоне
-        const matrixRain = document.getElementById('matrixRain');
-        const chars = "01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン";
+        // Matrix rain animation
+        const canvas = document.getElementById('matrix-rain');
+        const ctx = canvas.getContext('2d');
         
-        function createMatrixRain() {
-            const columns = Math.floor(window.innerWidth / 20);
-            
-            for (let i = 0; i < columns; i++) {
-                const column = document.createElement('div');
-                column.style.position = 'absolute';
-                column.style.top = '0';
-                column.style.left = `${i * 20}px`;
-                column.style.width = '2px';
-                column.style.height = `${Math.random() * 100 + 50}px`;
-                column.style.background = 'linear-gradient(transparent, var(--matrix-green))';
-                column.style.animation = `matrix-fall ${Math.random() * 3 + 2}s linear infinite`;
-                column.style.animationDelay = `${Math.random() * 5}s`;
-                matrixRain.appendChild(column);
-            }
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        // Japanese katakana characters
+        const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
+        const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const nums = '0123456789';
+        
+        const alphabet = katakana + latin + nums;
+        
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        
+        const rainDrops = [];
+        
+        for (let x = 0; x < columns; x++) {
+            rainDrops[x] = 1;
         }
         
-        // Инициализация дождя
-        createMatrixRain();
-        
-        // Обработчики кнопок
-        const glowBtn = document.getElementById('glowBtn');
-        const animateBtn = document.getElementById('animateBtn');
-        const colorBtn = document.getElementById('colorBtn');
-        const matrixCat = document.getElementById('matrixCat');
-        
-        let isAnimated = false;
-        let colors = ['#00ff41', '#00ffff', '#ff00ff', '#ffff00', '#ff5500'];
-        let currentColorIndex = 0;
-        
-        glowBtn.addEventListener('click', () => {
-            matrixCat.style.textShadow = `0 0 ${Math.random() * 20 + 10}px ${getComputedStyle(document.documentElement).getPropertyValue('--matrix-green')}`;
-        });
-        
-        animateBtn.addEventListener('click', () => {
-            isAnimated = !isAnimated;
+        const draw = () => {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
             
-            if (isAnimated) {
-                animateMatrixCat();
-                animateBtn.textContent = 'Остановить';
-            } else {
-                animateBtn.textContent = 'Анимация';
-            }
-        });
-        
-        colorBtn.addEventListener('click', () => {
-            currentColorIndex = (currentColorIndex + 1) % colors.length;
-            document.documentElement.style.setProperty('--matrix-green', colors[currentColorIndex]);
-        });
-        
-        // Анимация кота
-        function animateMatrixCat() {
-            if (!isAnimated) return;
+            ctx.fillStyle = '#00ff41';
+            ctx.font = fontSize + 'px monospace';
             
-            const catLines = matrixCat.textContent.split('\n');
-            let newCat = '';
-            
-            for (let line of catLines) {
-                let newLine = '';
-                for (let char of line) {
-                    if (Math.random() > 0.9 && char !== ' ') {
-                        newLine += chars[Math.floor(Math.random() * chars.length)];
-                    } else {
-                        newLine += char;
-                    }
+            for (let i = 0; i < rainDrops.length; i++) {
+                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+                
+                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    rainDrops[i] = 0;
                 }
-                newCat += newLine + '\n';
+                rainDrops[i]++;
             }
+        };
+        
+        setInterval(draw, 30);
+        
+        // Terminal typing effect
+        const terminalCommands = [
+            "> system.diagnostics --full",
+            "> access --mainframe",
+            "> decrypt --zion.location",
+            "> bypass --security.protocol",
+            "> upload --kungfu.master"
+        ];
+        
+        const terminalElement = document.querySelector('.terminal-content');
+        const cursorElement = document.querySelector('.cursor');
+        
+        let currentCommand = 0;
+        
+        const typeNextCommand = () => {
+            const command = terminalCommands[currentCommand % terminalCommands.length];
+            const p = document.createElement('p');
+            p.className = 'command';
+            terminalElement.insertBefore(p, cursorElement.parentNode);
             
-            matrixCat.textContent = newCat;
+            let i = 0;
+            const typing = setInterval(() => {
+                p.textContent = command.substring(0, i);
+                i++;
+                if (i > command.length) {
+                    clearInterval(typing);
+                    setTimeout(() => {
+                        const response = document.createElement('p');
+                        response.className = 'response';
+                        
+                        // Add different responses
+                        if (currentCommand % 5 === 0) {
+                            response.textContent = 'System diagnostics complete. No anomalies detected.';
+                        } else if (currentCommand % 5 === 1) {
+                            response.textContent = 'Access granted. Mainframe connection established.';
+                        } else if (currentCommand % 5 === 2) {
+                            response.textContent = 'Decryption in progress... Zion location secured.';
+                        } else if (currentCommand % 5 === 3) {
+                            response.textContent = 'Security protocol bypassed. Agent Smith alerted.';
+                        } else {
+                            response.textContent = 'Upload complete. Kung Fu mastery achieved.';
+                        }
+                        
+                        terminalElement.insertBefore(response, cursorElement.parentNode);
+                        currentCommand++;
+                        
+                        // Scroll to bottom
+                        terminalElement.scrollTop = terminalElement.scrollHeight;
+                        
+                        // Schedule next command
+                        setTimeout(typeNextCommand, 2000);
+                    }, 500);
+                }
+            }, 100);
+        };
+        
+        // Start the typing effect after a delay
+        setTimeout(typeNextCommand, 3000);
+        
+        // Modal functionality
+        const modal = document.getElementById('matrixModal');
+        const modalContent = document.getElementById('modalContent');
+        const modalText = document.getElementById('modalText');
+        const redPillBtn = document.getElementById('redPillBtn');
+        const modalClose = document.getElementById('modalClose');
+        
+        redPillBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
             
-            setTimeout(animateMatrixCat, 100);
+            // Start virus/bug animations
+            startVirusAttack();
+            
+            // Change text after delay
+            setTimeout(() => {
+                modalText.textContent = 'SYSTEM BREACH DETECTED';
+            }, 2000);
+            
+            setTimeout(() => {
+                modalText.textContent = 'VIRUS ACTIVATED';
+            }, 4000);
+            
+            setTimeout(() => {
+                modalText.textContent = 'CRITICAL ERROR';
+            }, 6000);
+            
+            setTimeout(() => {
+                modalText.textContent = 'Soon...';
+                stopVirusAttack();
+            }, 8000);
+        });
+        
+        modalClose.addEventListener('click', function() {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            stopVirusAttack();
+        });
+        
+        // Close modal when clicking outside
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+                stopVirusAttack();
+            }
+        });
+        
+        // Virus/bug attack functions
+        let virusInterval;
+        let bugInterval;
+        let errorInterval;
+        
+        function startVirusAttack() {
+            // Create viruses
+            virusInterval = setInterval(() => {
+                const virus = document.createElement('div');
+                virus.className = 'virus';
+                virus.textContent = 'VIRUS[' + Math.floor(Math.random() * 1000) + ']';
+                virus.style.left = Math.random() * 20 + 'px';
+                virus.style.top = Math.random() * 20 + 'px';
+                virus.style.animationDuration = (Math.random() * 5 + 3) + 's';
+                modalContent.appendChild(virus);
+                
+                // Remove after animation
+                setTimeout(() => {
+                    virus.remove();
+                }, 10000);
+            }, 500);
+            
+            // Create bugs
+            bugInterval = setInterval(() => {
+                const bug = document.createElement('div');
+                bug.className = 'bug';
+                bug.textContent = 'BUG_' + Math.floor(Math.random() * 100);
+                bug.style.left = Math.random() * 100 + 'px';
+                bug.style.top = Math.random() * 100 + 'px';
+                bug.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                modalContent.appendChild(bug);
+                
+                // Remove after animation
+                setTimeout(() => {
+                    bug.remove();
+                }, 5000);
+            }, 300);
+            
+            // Create errors
+            errorInterval = setInterval(() => {
+                const error = document.createElement('div');
+                error.className = 'error';
+                error.textContent = 'ERROR: 0x' + Math.floor(Math.random() * 0xFFFFFF).toString(16);
+                error.style.left = (Math.random() * 80 + 10) + '%';
+                error.style.top = (Math.random() * 80 + 10) + '%';
+                modalContent.appendChild(error);
+                
+                // Remove after animation
+                setTimeout(() => {
+                    error.remove();
+                }, 1000);
+            }, 200);
         }
         
-        // Реакция на движение мыши
-        document.addEventListener('mousemove', (e) => {
-            const x = e.clientX / window.innerWidth;
-            const y = e.clientY / window.innerHeight;
+        function stopVirusAttack() {
+            clearInterval(virusInterval);
+            clearInterval(bugInterval);
+            clearInterval(errorInterval);
             
-            matrixCat.style.transform = `rotateX(${y * 10 - 5}deg) rotateY(${x * 10 - 5}deg)`;
+            // Remove all existing effects
+            document.querySelectorAll('.virus, .bug, .error').forEach(el => {
+                el.remove();
+            });
+        }
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
         });
     </script>
 </body>
