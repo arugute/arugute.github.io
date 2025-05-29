@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MATRIX</title>
+    <style>
+        :root {
+            --matrix-green: #00ff41;
+            --matrix-dark: #0d0208;
+            --matrix-light: #003b00;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', monospace;
+        }
+        
+        body {
+            background-color: var(--matrix-dark);
+            color: var(--matrix-green);
+            overflow-x: hidden;
+            position: relative;
+            height: 100vh;
+            line-height: 1.6;
+        }
+        
+        /* Matrix rain background */
+        .matrix-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+        
+        /* Main container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Header */
+        header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--matrix-green);
+            margin-bottom: 2rem;
+            animation: flicker 5s infinite alternate;
+            position: relative;
+        }
+        
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            text-shadow: 0 0 10px var(--matrix-green);
+            letter-spacing: 2px;
+        }
+        
+        .logo span {
+            color: #fff;
+        }
+        
+        /* DEV Button */
+        .dev-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.5rem 1rem;
+            background: transparent;
+            color: var(--matrix-green);
+            border: 1px solid var(--matrix-green);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            z-index: 10;
+        }
+        
+        .dev-btn:hover {
+            background: var(--matrix-green);
+            color: var(--matrix-dark);
+            box-shadow: 0 0 10px var(--matrix-green);
+        }
+        
+        /* Hero section */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            min-height: 60vh;
+            padding: 2rem 0;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 15px var(--matrix-green);
+            animation: pulse 2s infinite;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: transparent;
+            color: var(--matrix-green);
+            border: 1px solid var(--matrix-green);
+            border-radius: 4px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-button:hover {
+            background: var(--matrix-green);
+            color: var(--matrix-dark);
+            box-shadow: 0 0 20px var(--matrix-green);
+        }
+        
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.4), transparent);
+            transition: 0.5s;
+        }
+        
+        .cta-button:hover::before {
+            left: 100%;
+        }
+        
+        /* Terminal effect */
+        .terminal {
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid var(--matrix-green);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 3rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--matrix-light);
+        }
+        
+        .terminal-dots {
+            display: flex;
+            gap: 0.5rem;
+            margin-right: 1rem;
+        }
+        
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .terminal-dot:nth-child(1) {
+            background: #ff5f56;
+        }
+        
+        .terminal-dot:nth-child(2) {
+            background: #ffbd2e;
+        }
+        
+        .terminal-dot:nth-child(3) {
+            background: #27c93f;
+        }
+        
+        .terminal-title {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        .terminal-content {
+            font-family: 'Courier New', monospace;
+            line-height: 1.8;
+        }
+        
+        .terminal-content p {
+            margin-bottom: 0.5rem;
+        }
+        
+        .terminal-content .command {
+            color: #fff;
+        }
+        
+        .terminal-content .response {
+            opacity: 0.7;
+        }
+        
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 1.2rem;
+            background: var(--matrix-green);
+            animation: blink 1s infinite;
+            vertical-align: middle;
+            margin-left: 2px;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+            border-top: 1px solid var(--matrix-light);
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .modal-content {
+            position: relative;
+            width: 80%;
+            max-width: 800px;
+            height: 70vh;
+            background-color: var(--matrix-dark);
+            border: 1px solid var(--matrix-green);
+            border-radius: 8px;
+            padding: 2rem;
+            overflow: hidden;
+            animation: glitch 1s linear infinite;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            color: var(--matrix-green);
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 1001;
+        }
+        
+        .modal-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+            text-align: center;
+            width: 100%;
+            padding: 0 2rem;
+        }
+        
+        .virus {
+            position: absolute;
+            color: #ff5555;
+            font-size: 1.5rem;
+            animation: virusMove linear infinite;
+            opacity: 0;
+        }
+        
+        .bug {
+            position: absolute;
+            color: #ffaa00;
+            font-size: 1rem;
+            animation: bugMove linear infinite;
+            opacity: 0;
+        }
+        
+        .error {
+            position: absolute;
+            color: #ff0000;
+            font-size: 1.2rem;
+            animation: errorShake 0.1s infinite;
+            opacity: 0;
+        }
+        
+        /* Animations */
+        @keyframes flicker {
+            0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% {
+                opacity: 1;
+            }
+            20%, 21.999%, 63%, 63.999%, 65%, 69.999% {
+                opacity: 0.6;
+            }
+        }
+        
+        @keyframes pulse {
+            0% {
+                opacity: 0.8;
+            }
+            50% {
+                opacity: 1;
+                text-shadow: 0 0 20px var(--matrix-green);
+            }
+            100% {
+                opacity: 0.8;
+            }
+        }
+        
+        @keyframes blink {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0;
+            }
+        }
+        
+        @keyframes glitch {
+            0% {
+                transform: translate(0);
+            }
+            20% {
+                transform: translate(-2px, 2px);
+            }
+            40% {
+                transform: translate(-2px, -2px);
+            }
+            60% {
+                transform: translate(2px, 2px);
+            }
+            80% {
+                transform: translate(2px, -2px);
+            }
+            100% {
+                transform: translate(0);
+            }
+        }
+        
+        @keyframes virusMove {
+            0% {
+                transform: translate(0, 0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translate(calc(100vw - 100px), calc(100vh - 100px));
+                opacity: 0;
+            }
+        }
+        
+        @keyframes bugMove {
+            0% {
+                transform: translate(0, 0);
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                transform: translate(calc(50vw - 100px), calc(50vh - 100px));
+                opacity: 0;
+            }
+        }
+        
+        @keyframes errorShake {
+            0% {
+                transform: translate(1px, 1px);
+            }
+            10% {
+                transform: translate(-1px, -2px);
+            }
+            20% {
+                transform: translate(-3px, 0px);
+            }
+            30% {
+                transform: translate(3px, 2px);
+            }
+            40% {
+                transform: translate(1px, -1px);
+            }
+            50% {
+                transform: translate(-1px, 2px);
+            }
+            60% {
+                transform: translate(-3px, 1px);
+            }
+            70% {
+                transform: translate(3px, 1px);
+            }
+            80% {
+                transform: translate(-1px, -1px);
+            }
+            90% {
+                transform: translate(1px, 2px);
+            }
+            100% {
+                transform: translate(1px, -2px);
+            }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .modal-content {
+                width: 95%;
+                height: 80vh;
+            }
+            
+            .modal-text {
+                font-size: 1.5rem;
+            }
+            
+            .dev-btn {
+                top: 0.5rem;
+                right: 0.5rem;
+                padding: 0.3rem 0.7rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Matrix rain background -->
+    <canvas id="matrix-rain" class="matrix-rain"></canvas>
+    
+    <div class="container">
+        <header>
+            <div class="logo">MATRIX</div>
+            <a href="https://t.me/NeoKnockKnockMatrix" class="dev-btn" target="_blank">DEV</a>
+        </header>
+        
+        <section class="hero">
+            <h1>WAKE UP, <span>NEO</span>...</h1>
+            <p>The Matrix has you. Follow the white rabbit. Knock, knock, Neo. The truth is waiting.</p>
+            <a href="#" id="redPillBtn" class="cta-button">TAKE THE RED PILL</a>
+        </section>
+        
+        <div class="terminal">
+            <div class="terminal-header">
+                <div class="terminal-dots">
+                    <div class="terminal-dot"></div>
+                    <div class="terminal-dot"></div>
+                    <div class="terminal-dot"></div>
+                </div>
+                <div class="terminal-title">user@matrix:~</div>
+            </div>
+            <div class="terminal-content">
+                <p class="command">> system.status --matrix</p>
+                <p class="response">MATRIX OS v3.1.1 running</p>
+                <p class="command">> connect --neo</p>
+                <p class="response">Establishing connection... done.</p>
+                <p class="command">> run --prophecy</p>
+                <p class="response">You are The One, Neo. The prophecy is true.</p>
+                <p class="command">> _<span class="cursor"></span></p>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 MATRIX | The system is watching</p>
+        </footer>
+    </div>
+    
+    <!-- Modal -->
+    <div id="matrixModal" class="modal">
+        <div class="modal-content" id="modalContent">
+            <span class="modal-close" id="modalClose">&times;</span>
+            <div class="modal-text" id="modalText">ACCESSING REALITY CORE...</div>
+        </div>
+    </div>
+    
+    <script>
+        // Matrix rain animation
+        const canvas = document.getElementById('matrix-rain');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        // Japanese katakana characters
+        const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
+        const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const nums = '0123456789';
+        
+        const alphabet = katakana + latin + nums;
+        
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        
+        const rainDrops = [];
+        
+        for (let x = 0; x < columns; x++) {
+            rainDrops[x] = 1;
+        }
+        
+        const draw = () => {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = '#00ff41';
+            ctx.font = fontSize + 'px monospace';
+            
+            for (let i = 0; i < rainDrops.length; i++) {
+                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+                
+                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    rainDrops[i] = 0;
+                }
+                rainDrops[i]++;
+            }
+        };
+        
+        setInterval(draw, 30);
+        
+        // Terminal typing effect
+        const terminalCommands = [
+            "> system.diagnostics --full",
+            "> access --mainframe",
+            "> decrypt --zion.location",
+            "> bypass --security.protocol",
+            "> upload --kungfu.master"
+        ];
+        
+        const terminalElement = document.querySelector('.terminal-content');
+        const cursorElement = document.querySelector('.cursor');
+        
+        let currentCommand = 0;
+        
+        const typeNextCommand = () => {
+            const command = terminalCommands[currentCommand % terminalCommands.length];
+            const p = document.createElement('p');
+            p.className = 'command';
+            terminalElement.insertBefore(p, cursorElement.parentNode);
+            
+            let i = 0;
+            const typing = setInterval(() => {
+                p.textContent = command.substring(0, i);
+                i++;
+                if (i > command.length) {
+                    clearInterval(typing);
+                    setTimeout(() => {
+                        const response = document.createElement('p');
+                        response.className = 'response';
+                        
+                        // Add different responses
+                        if (currentCommand % 5 === 0) {
+                            response.textContent = 'System diagnostics complete. No anomalies detected.';
+                        } else if (currentCommand % 5 === 1) {
+                            response.textContent = 'Access granted. Mainframe connection established.';
+                        } else if (currentCommand % 5 === 2) {
+                            response.textContent = 'Decryption in progress... Zion location secured.';
+                        } else if (currentCommand % 5 === 3) {
+                            response.textContent = 'Security protocol bypassed. Agent Smith alerted.';
+                        } else {
+                            response.textContent = 'Upload complete. Kung Fu mastery achieved.';
+                        }
+                        
+                        terminalElement.insertBefore(response, cursorElement.parentNode);
+                        currentCommand++;
+                        
+                        // Scroll to bottom
+                        terminalElement.scrollTop = terminalElement.scrollHeight;
+                        
+                        // Schedule next command
+                        setTimeout(typeNextCommand, 2000);
+                    }, 500);
+                }
+            }, 100);
+        };
+        
+        // Start the typing effect after a delay
+        setTimeout(typeNextCommand, 3000);
+        
+        // Modal functionality
+        const modal = document.getElementById('matrixModal');
+        const modalContent = document.getElementById('modalContent');
+        const modalText = document.getElementById('modalText');
+        const redPillBtn = document.getElementById('redPillBtn');
+        const modalClose = document.getElementById('modalClose');
+        
+        redPillBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            
+            // Start virus/bug animations
+            startVirusAttack();
+            
+            // Change text after delay
+            setTimeout(() => {
+                modalText.textContent = 'SYSTEM BREACH DETECTED';
+            }, 2000);
+            
+            setTimeout(() => {
+                modalText.textContent = 'VIRUS ACTIVATED';
+            }, 4000);
+            
+            setTimeout(() => {
+                modalText.textContent = 'CRITICAL ERROR';
+            }, 6000);
+            
+            setTimeout(() => {
+                modalText.textContent = 'Soon...';
+                stopVirusAttack();
+            }, 8000);
+        });
+        
+        modalClose.addEventListener('click', function() {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            stopVirusAttack();
+        });
+        
+        // Close modal when clicking outside
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+                stopVirusAttack();
+            }
+        });
+        
+        // Virus/bug attack functions
+        let virusInterval;
+        let bugInterval;
+        let errorInterval;
+        
+        function startVirusAttack() {
+            // Create viruses
+            virusInterval = setInterval(() => {
+                const virus = document.createElement('div');
+                virus.className = 'virus';
+                virus.textContent = 'VIRUS[' + Math.floor(Math.random() * 1000) + ']';
+                virus.style.left = Math.random() * 20 + 'px';
+                virus.style.top = Math.random() * 20 + 'px';
+                virus.style.animationDuration = (Math.random() * 5 + 3) + 's';
+                modalContent.appendChild(virus);
+                
+                // Remove after animation
+                setTimeout(() => {
+                    virus.remove();
+                }, 10000);
+            }, 500);
+            
+            // Create bugs
+            bugInterval = setInterval(() => {
+                const bug = document.createElement('div');
+                bug.className = 'bug';
+                bug.textContent = 'BUG_' + Math.floor(Math.random() * 100);
+                bug.style.left = Math.random() * 100 + 'px';
+                bug.style.top = Math.random() * 100 + 'px';
+                bug.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                modalContent.appendChild(bug);
+                
+                // Remove after animation
+                setTimeout(() => {
+                    bug.remove();
+                }, 5000);
+            }, 300);
+            
+            // Create errors
+            errorInterval = setInterval(() => {
+                const error = document.createElement('div');
+                error.className = 'error';
+                error.textContent = 'ERROR: 0x' + Math.floor(Math.random() * 0xFFFFFF).toString(16);
+                error.style.left = (Math.random() * 80 + 10) + '%';
+                error.style.top = (Math.random() * 80 + 10) + '%';
+                modalContent.appendChild(error);
+                
+                // Remove after animation
+                setTimeout(() => {
+                    error.remove();
+                }, 1000);
+            }, 200);
+        }
+        
+        function stopVirusAttack() {
+            clearInterval(virusInterval);
+            clearInterval(bugInterval);
+            clearInterval(errorInterval);
+            
+            // Remove all existing effects
+            document.querySelectorAll('.virus, .bug, .error').forEach(el => {
+                el.remove();
+            });
+        }
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>
